@@ -11,7 +11,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using HotelListing.Configurations;
 using HotelListing.Data;
+using HotelListing.IRepository;
+using HotelListing.Repository;
 using Microsoft.EntityFrameworkCore;
 
 namespace HotelListing
@@ -28,7 +31,7 @@ namespace HotelListing
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-
+            services.AddTransient<IUnitOfWork, UnitOfWork>();
 
             services.AddDbContext<DatabaseContext>(o =>
                 o.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
@@ -42,6 +45,7 @@ namespace HotelListing
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "HotelListing", Version = "v1" });
             });
             services.AddControllers();
+            services.AddAutoMapper(typeof(MapperInitilizer));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
